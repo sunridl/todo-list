@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Дела и задачи</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=ru">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="vendor/mdl/material.min.css">
+    <link rel="stylesheet" href="altstyle.css">
+  </head>
+  <body>
+    <div class="layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+      <header class="header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+        <div class="mdl-layout__header-row header-flex">
+          <div class="mdl-layout-title title-flex">
+            <form action="#">
+              <div class="mdl-textfield mdl-js-textfield new-task__holder">
+                <input class="mdl-textfield__input" type="text" id="new-task__input">
+                <label class="mdl-textfield__label" for="new-task__input">Что Вы хотите сделать? Что запомнить?</label>
+              </div>
+              <label class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect">
+                <i class="material-icons">add_circle_outline</i>
+              </label>
+            </form>
+          </div>
+          <div class="mdl-layout-spacer"></div>
+          <div>
+            <label id="volume-toggle-container" class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="volume-toggle">
+              <input type="checkbox" id="volume-toggle" class="mdl-icon-toggle__input">
+              <i class="mdl-icon-toggle__label material-icons">volume_up</i>
+              <div class="volume-tooltip toggle-tooltip mdl-tooltip" for="volume-toggle-container"> звуковые уведомления</div>
+            </label>
+            <label id="notes-toggle-container" class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="notes-toggle">
+              <input type="checkbox" id="notes-toggle" class="mdl-icon-toggle__input">
+              <i class="mdl-icon-toggle__label material-icons">speaker_notes</i>
+              <div class="notes-tooltip toggle-tooltip mdl-tooltip" for="notes-toggle-container"> визуальные уведомления </div>
+            </label>
+          </div>
+        </div>
+      </header>
+      <div class="drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+        <span class="mdl-layout-title">Фильтры</span>
+        <nav class="navigation mdl-navigation mdl-color--blue-grey-800">
+          <a class="mdl-navigation__link" href=""><i class="round_box importance_red"></i></a>
+          <a class="mdl-navigation__link" href=""><i class="round_box importance_yellow"></i></a>
+          <a class="mdl-navigation__link" href=""><i class="round_box importance_green"></i></a>
+          <div class="mdl-layout-spacer"></div>
+          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">report</i>Spam</a>
+          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">forum</i>Forums</a>
+          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">flag</i>Updates</a>
+          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">local_offer</i>Promos</a>
+          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">shopping_cart</i>Purchases</a>
+          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">people</i>Social</a>
+          <div class="mdl-layout-spacer"></div>
+          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
+        </nav>
+      </div>
+      <main class="mdl-layout__content mdl-color--grey-50">
+        <ul id="todo-items-list" class="mdl-list">
+          <script id="todo-items-list-template" type="text/x-handlebars-template">
+            {{#each this}}
+              <li id="todo-item-{{task_id}}" class="mdl-list__item mdl-list__item--two-line divider list_item mdl-grid mdl-cell mdl-cell--12-col" data-task-id="{{task_id}}">
+                <span class="mdl-list__item-primary-content task-picture">
+                  <i class="material-icons mdl-list__item-avatar">shopping_cart</i>
+                  <span class="task-description">{{task}}</span>
+                  <span class="mdl-list__item-sub-title task-time">{{time}} | {{period}}</span>
+                </span>
+                <span class="mdl-list__item-secondary-content edit_control" onclick="deleteTask('{{task_id}}')">
+                  <a id="task-delete-{{task_id}}" data-task-id="{{task_id}}" class="mdl-list__item-secondary-action mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect cancel-button" href="#"><i class="material-icons">cancel</i></a>
+                  <div class="mdl-tooltip" data-mdl-for="task-delete-{{task_id}}">Удалить задачу</div>
+                </span>
+                <span class="mdl-list__item-secondary-content edit_control" onclick="markTaskDone('{{task_id}}')">
+                  <a id='task-done-{{task_id}}' data-task-id="{{task_id}}" class="mdl-list__item-secondary-action mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-js-ripple-effect" href="#"><i class="material-icons mdl-color-text--green">done</i></a>
+                  <div class="mdl-tooltip" data-mdl-for="task-done-{{task_id}}">Отметить как выполненное</div>
+                </span>
+              </li>
+            {{/each}}
+          </script>
+        </ul>
+      </main>
+      <dialog id="notification" class="mdl-dialog">
+        <h4 id="notification-title" class="mdl-dialog__title">Заголовок задачи.</h4>
+        <div class="mdl-dialog__content">
+          <p id="notification-content">Описание задачи.</p>
+        </div>
+        <div class="mdl-dialog__actions">
+          <button type="button" class="mdl-button close">Ясно</button>
+        </div>
+      </dialog>
+    </div>
+    <script src="vendor/mdl/material.min.js"></script>
+    <script src="vendor/jquery.min.js"></script>
+    <script src="vendor/handlebars.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
